@@ -1,0 +1,4 @@
+create table teste
+add column table teste nome text
+insert table teste (id, nome, sobrenome) values(10, "izaque", "")
+select table teste (id, nome, sobrenome)
