@@ -1,4 +1,4 @@
-package main
+package commands
 
 func isCommandCreateTable(commands []string) bool {
 	//create table table_name

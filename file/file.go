@@ -1,4 +1,4 @@
-package main
+package file
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func createDir(nameDir string) {
+func CreateDir(nameDir string) {
 	err := os.Mkdir(nameDir, os.ModePerm)
 	if err != nil {
 		fmt.Println("Erro ao criar a pasta:", err)
@@ -16,7 +16,7 @@ func createDir(nameDir string) {
 	}
 }
 
-func dirExists(path string) bool {
+func DirExists(path string) bool {
 
 	_, err := os.Stat(path)
 	if err == nil {
@@ -30,7 +30,7 @@ func dirExists(path string) bool {
 	}
 }
 
-func fileExists(filename string) bool {
+func FileExists(filename string) bool {
 	_, err := os.Stat(filename)
 	if err == nil {
 		return true // O arquivo existe
@@ -43,7 +43,7 @@ func fileExists(filename string) bool {
 	}
 }
 
-func appendLineToFile(filename string, line string) error {
+func AppendLineToFile(filename string, line string) error {
 
 	file, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
@@ -59,7 +59,7 @@ func appendLineToFile(filename string, line string) error {
 	return nil
 }
 
-func createFile(nameFile string) *os.File {
+func CreateFile(nameFile string) *os.File {
 
 	file, err := os.Create(nameFile)
 	if err != nil {
@@ -73,7 +73,7 @@ func createFile(nameFile string) *os.File {
 
 }
 
-func openFile(nameFile string) *os.File {
+func OpenFile(nameFile string) *os.File {
 
 	file, err := os.Open(nameFile)
 	if err != nil {
@@ -85,11 +85,11 @@ func openFile(nameFile string) *os.File {
 
 }
 
-func closeFile(file *os.File) {
+func CloseFile(file *os.File) {
 	defer file.Close()
 }
 
-func readLines(filename string) ([]string, error) {
+func ReadLines(filename string) ([]string, error) {
 
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {

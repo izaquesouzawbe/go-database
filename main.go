@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"go-database/commands"
 	"os"
 )
 
@@ -25,17 +26,7 @@ func main() {
 			return
 		}
 
-		runCommand(line)
+		commands.RunCommand(line)
 	}
 
-}
-
-func before() {
-	createDirData()
-}
-
-func createDirData() {
-	if !dirExists("data/") {
-		createDir("data/")
-	}
 }

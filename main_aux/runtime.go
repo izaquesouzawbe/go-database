@@ -1,4 +1,4 @@
-package main
+package main_aux
 
 import (
 	"fmt"
@@ -7,11 +7,11 @@ import (
 
 var runtimeVar time.Time
 
-func runtimeStarted() {
+func RuntimeStarted() {
 	runtimeVar = time.Now()
 }
 
-func runtimeDone() {
+func RuntimeDone() {
 	fmt.Printf("Runtime: %s\n", time.Since(runtimeVar))
 	fmt.Println("")
 }
