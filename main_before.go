@@ -3,15 +3,15 @@ package main
 import (
 	"go-database/file"
 	"go-database/routes"
-	"go-database/scheduleds"
+	"go-database/scheduled"
 )
 
 func before() {
 
 	createDirData()
 
-	routes.CreateRoutes()
-	go scheduleds.ScheduledTask()
+	go routes.CreateRoutes()
+	go scheduled.StartScheduled()
 }
 
 func createDirData() {
