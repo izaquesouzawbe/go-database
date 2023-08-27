@@ -1,5 +1,13 @@
 package commands
 
+func isCommandCreateDatabase(commands []string) bool {
+	return commands[0] == "create" && commands[1] == "database"
+}
+
+func isCommandUseDatabase(commands []string) bool {
+	return commands[0] == "use" && commands[1] == "database"
+}
+
 func isCommandCreateTable(commands []string) bool {
 	//create table table_name
 	return commands[0] == "create" && commands[1] == "table"

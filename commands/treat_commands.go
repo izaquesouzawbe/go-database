@@ -5,14 +5,13 @@ import (
 	"strings"
 )
 
-func cleanCommand(command string) string {
+func cleanQuery(query string) string {
 
-	text := strings.ToLower(command)
+	query = strings.ToLower(query)
+	query = strings.TrimSpace(query)
+	query = reduceToSingleSpace(query)
 
-	text = strings.TrimSpace(text)
-	text = reduceToSingleSpace(text)
-
-	return text
+	return query
 }
 
 func getListCommand(command string) []string {

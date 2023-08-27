@@ -59,7 +59,7 @@ func AppendLineToFile(filename string, line string) error {
 	return nil
 }
 
-func CreateFile(nameFile string) *os.File {
+func CreateFile(nameFile string, returnValue bool) *os.File {
 
 	file, err := os.Create(nameFile)
 	if err != nil {
@@ -67,7 +67,9 @@ func CreateFile(nameFile string) *os.File {
 		return nil
 	}
 
-	defer file.Close()
+	if !returnValue {
+		defer file.Close()
+	}
 
 	return file
 

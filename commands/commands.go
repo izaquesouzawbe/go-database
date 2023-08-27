@@ -4,32 +4,40 @@ import (
 	"fmt"
 	"go-database/file"
 	"go-database/main_aux"
+	"log"
 )
-
-var path string = "data/"
 
 func RunCommand(query string) {
 
-	fmt.Println("Query: ", query)
-	query = cleanCommand(query)
-
-	commands := getListCommand(query)
-
 	main_aux.RuntimeStarted()
 
-	fmt.Println(commands)
+	log.Println("Query: ", query)
 
-	if isCommandCreateTable(commands) {
-		commandCreateTable(commands)
-	} else if isCommandAddColumn(commands) {
+	query = cleanQuery(query)
+	commands := getListCommand(query)
+
+	switch {
+	case isCommandCreateDatabase(commands):
+		commandCreateDatabase(commands)
+
+	case isCommandUseDatabase(commands):
+		commandUseDatabase(commands)
+
+	case isCommandCreateTable(commands):
+		commandCreateTable(query, commands)
+
+	case isCommandAddColumn(commands):
 		commandAddColumn(commands)
-	} else if isCommandSelectTable(commands) {
+
+	case isCommandSelectTable(commands):
 		commandSelectTable(commands)
-	} else {
+
+	default:
 		fmt.Println("Command not found")
 	}
 
 	main_aux.RuntimeDone()
+
 }
 
 func commandAddColumn(commands []string) {

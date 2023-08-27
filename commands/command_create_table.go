@@ -1,19 +1,47 @@
 package commands
 
 import (
-	"fmt"
+	"encoding/json"
 	"go-database/file"
+	"log"
 )
 
-func commandCreateTable(commands []string) {
+type Table struct {
+	TableName string              `json:"table_name"`
+	Fields    []map[string]string `json:"fields"`
+}
 
-	table := commands[2]
+func commandCreateTable(query string, commands []string) {
 
-	if !file.DirExists(getPathTable(table)) {
-		file.CreateDir(getPathTable(table))
+	tableName := commands[2]
+
+	if !file.DirExists(getPathTable(tableName)) {
+		file.CreateDir(getPathTable(tableName))
 	}
 
-	file.CreateFile(getPathTable(table) + "config.txt")
+	fields := extractFieldsAndTypes(query)
 
-	fmt.Println("Table " + table + " successfully created...")
+	for field, fieldType := range fields {
+		log.Printf("%s: %s\n", field, fieldType)
+	}
+
+	tableData := Table{
+		TableName: tableName,
+		Fields:    getFields(fields),
+	}
+
+	file := file.CreateFile(getPathConfigTable(tableName), true)
+	encoder := json.NewEncoder(file)
+	encoder.Encode(tableData)
+}
+
+func getFields(map[string]string) []map[string]string {
+
+	return []map[string]string{
+		{"name": "id", "type": "int"},
+		{"name": "nome", "type": "varchar"},
+		{"name": "email", "type": "varchar"},
+		{"name": "data_nascimento", "type": "date"},
+	}
+
 }

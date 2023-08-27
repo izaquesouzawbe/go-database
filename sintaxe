@@ -1,4 +1,3 @@
-create table teste
-add column table teste nome text
-insert table teste (id, nome, sobrenome) values(10, "izaque", "")
-select table teste (id, nome, sobrenome)
+1-create database database_name
+2-use database database_name
+3-create table table_teste (campo1 text, campo2 text, campo3 text)

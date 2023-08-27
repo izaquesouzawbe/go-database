@@ -7,7 +7,7 @@ import (
 
 func extractColumns(query string) []string {
 
-	query = cleanCommand(query)
+	query = cleanQuery(query)
 
 	re := regexp.MustCompile(`SELECT\s+(.*?)\s+FROM`)
 	matches := re.FindStringSubmatch(query)
@@ -44,4 +44,22 @@ func extractKeyValuePairs(query string) map[string]string {
 		return keyValuePairs
 	}
 	return nil
+}
+
+func extractFieldsAndTypes(input string) map[string]string {
+	result := make(map[string]string)
+	re := regexp.MustCompile(`\((.*?)\)`)
+	matches := re.FindStringSubmatch(input)
+
+	if len(matches) == 2 {
+		fields := strings.Split(matches[1], ",")
+		for _, field := range fields {
+			parts := strings.Split(strings.TrimSpace(field), " ")
+			if len(parts) == 2 {
+				result[parts[0]] = parts[1]
+			}
+		}
+	}
+
+	return result
 }
