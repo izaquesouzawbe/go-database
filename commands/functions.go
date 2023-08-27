@@ -1,9 +1,47 @@
 package commands
 
 import (
+	"encoding/json"
+	"go-database/file"
 	"regexp"
 	"strings"
 )
+
+func cleanQuery(query string) string {
+
+	query = strings.ToLower(query)
+	query = strings.TrimSpace(query)
+	query = reduceToSingleSpace(query)
+
+	return query
+}
+
+func getListCommand(command string) []string {
+
+	stringList := strings.Split(command, " ")
+	return stringList
+}
+
+func reduceToSingleSpace(input string) string {
+	re := regexp.MustCompile(`\s+`)
+	return re.ReplaceAllString(input, " ")
+}
+
+func saveTableConfig(tableData Table) {
+
+	file := file.CreateFile(getPathConfigTable(tableData.TableName), true)
+	encoder := json.NewEncoder(file)
+	encoder.Encode(tableData)
+
+}
+
+func saveDatabaseConfig(databaseData Database) {
+
+	file := file.CreateFile(getPathConfigDatabase(), true)
+	encoder := json.NewEncoder(file)
+	encoder.Encode(databaseData)
+
+}
 
 func extractColumns(query string) []string {
 
