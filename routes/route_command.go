@@ -9,11 +9,16 @@ import (
 func commandRoute(c *gin.Context) {
 
 	var command Command
-	c.BindJSON(&command)
+	err := c.BindJSON(&command)
+	if err != nil {
+		return
+	}
 
 	log.Println(command)
 
-	commands.RunCommand(command.Query)
+	lines := commands.RunCommand(command.Query)
 
-	c.JSON(200, command)
+	//fmt.Println(lines)
+
+	c.JSON(200, lines)
 }

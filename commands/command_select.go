@@ -5,19 +5,20 @@ import (
 	"go-database/file"
 )
 
-func commandSelectTable(commands []string) []string {
-	//select * from teste
-	table := commands[2]
+func commandSelectTable(query string) []string {
+
+	table, _ := extractTable(query)
 
 	lines, _ := file.ReadLines(getPathDataTable(table))
+	tamanho := len(lines)
 
-	/*for index, line := range lines {
-		if index <= 100 {
+	for _ = range lines {
+		/*	if index <= 100 {
 			fmt.Println(strconv.Itoa(index) + " - " + line)
-		}
-	}*/
+		}*/
+	}
 
-	fmt.Println(table)
+	fmt.Println("count: ", tamanho)
 
 	return lines
 }

@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-func RunCommand(query string) {
+func RunCommand(query string) []string {
 
 	main_aux.RuntimeStarted()
 
@@ -15,6 +15,8 @@ func RunCommand(query string) {
 
 	query = cleanQuery(query)
 	commands := getListCommand(query)
+
+	var stringReturn []string
 
 	switch {
 	case isCommandCreateDatabase(commands):
@@ -33,13 +35,15 @@ func RunCommand(query string) {
 		commandInsertInto(query)
 
 	case isCommandSelectTable(commands):
-		commandSelectTable(commands)
+		stringReturn = commandSelectTable(query)
 
 	default:
 		fmt.Println("Command not found")
 	}
 
 	main_aux.RuntimeDone()
+
+	return stringReturn
 
 }
 

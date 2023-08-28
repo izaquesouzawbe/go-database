@@ -50,6 +50,17 @@ func saveDatabaseConfig(databaseData Database) {
 
 }
 
+func extractTable(query string) (string, error) {
+	re := regexp.MustCompile(`from\s+([^\s;]+)`)
+	matches := re.FindStringSubmatch(query)
+
+	if len(matches) < 2 {
+		return "", fmt.Errorf("Não foi possível extrair a tabela")
+	}
+
+	return matches[1], nil
+}
+
 func extractColumnsSelect(query string) []string {
 
 	re := regexp.MustCompile(`SELECT\s+(.*?)\s+FROM`)

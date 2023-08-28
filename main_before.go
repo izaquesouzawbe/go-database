@@ -2,7 +2,6 @@ package main
 
 import (
 	"go-database/commands"
-	"go-database/reading"
 	"go-database/routes"
 	"go-database/scheduled"
 )
@@ -14,6 +13,7 @@ func before() {
 	go routes.CreateRoutes()
 	go scheduled.StartScheduled()
 
-	reading.ReadInput()
+	select {}
+	//reading.ReadInput()
 
 }

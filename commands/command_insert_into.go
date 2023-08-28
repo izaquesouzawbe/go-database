@@ -32,9 +32,6 @@ func commandInsertInto(query string) {
 
 	}
 
-	err = file.AppendLineToFile(getPathDataTable(insertCommand.TableName), line)
-	if err != nil {
-		return
-	}
+	file.AppendLineToFile(getPathDataTable(insertCommand.TableName), line)
 
 }
