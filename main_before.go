@@ -1,21 +1,19 @@
 package main
 
 import (
-	"go-database/file"
+	"go-database/commands"
+	"go-database/reading"
 	"go-database/routes"
 	"go-database/scheduled"
 )
 
 func before() {
 
-	createDirData()
+	commands.CreateDirData()
 
 	go routes.CreateRoutes()
 	go scheduled.StartScheduled()
-}
 
-func createDirData() {
-	if !file.DirExists("data/") {
-		file.CreateDir("data/")
-	}
+	reading.ReadInput()
+
 }

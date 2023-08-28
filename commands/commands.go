@@ -29,6 +29,9 @@ func RunCommand(query string) {
 	case isCommandAddColumn(commands):
 		commandAddColumn(commands)
 
+	case isCommandInsertInto(commands):
+		commandInsertInto(query)
+
 	case isCommandSelectTable(commands):
 		commandSelectTable(commands)
 

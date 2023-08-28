@@ -2,10 +2,17 @@ package commands
 
 import (
 	"encoding/json"
+	"fmt"
 	"go-database/file"
 	"regexp"
 	"strings"
 )
+
+func CreateDirData() {
+	if !file.DirExists("data/") {
+		file.CreateDir("data/")
+	}
+}
 
 func cleanQuery(query string) string {
 
@@ -43,9 +50,7 @@ func saveDatabaseConfig(databaseData Database) {
 
 }
 
-func extractColumns(query string) []string {
-
-	query = cleanQuery(query)
+func extractColumnsSelect(query string) []string {
 
 	re := regexp.MustCompile(`SELECT\s+(.*?)\s+FROM`)
 	matches := re.FindStringSubmatch(query)
@@ -60,7 +65,7 @@ func extractColumns(query string) []string {
 
 }
 
-func extractKeyValuePairs(query string) map[string]string {
+func extractKeyValueWhere(query string) map[string]string {
 	re := regexp.MustCompile(`WHERE\s+(.*?)$`)
 	matches := re.FindStringSubmatch(query)
 	if len(matches) >= 2 {
@@ -84,7 +89,7 @@ func extractKeyValuePairs(query string) map[string]string {
 	return nil
 }
 
-func extractFieldsAndTypes(input string) map[string]string {
+func extractFieldsAndTypesCreateTable(input string) map[string]string {
 	result := make(map[string]string)
 	re := regexp.MustCompile(`\((.*?)\)`)
 	matches := re.FindStringSubmatch(input)
@@ -100,4 +105,32 @@ func extractFieldsAndTypes(input string) map[string]string {
 	}
 
 	return result
+}
+
+type InsertCommand struct {
+	TableName string
+	Fields    []string
+	Values    []string
+}
+
+func extractInsertCommandInfo(texto string) (*InsertCommand, error) {
+	re := regexp.MustCompile(`insert into ([^\s(]+)\(([^)]+)\) values \(([^)]+)\)`)
+	matches := re.FindStringSubmatch(texto)
+
+	if len(matches) < 4 {
+		return nil, fmt.Errorf("Não foi possível fazer o parsing do texto")
+	}
+
+	tabela := matches[1]
+	campos := matches[2]
+	valores := matches[3]
+
+	camposSeparados := regexp.MustCompile(`\s*,\s*`).Split(campos, -1)
+	valoresSeparados := regexp.MustCompile(`\s*,\s*`).Split(valores, -1)
+
+	return &InsertCommand{
+		TableName: tabela,
+		Fields:    camposSeparados,
+		Values:    valoresSeparados,
+	}, nil
 }

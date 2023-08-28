@@ -1,6 +1,7 @@
 package file
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -100,4 +101,42 @@ func ReadLines(filename string) ([]string, error) {
 
 	lines := strings.Split(string(content), "\n")
 	return lines, nil
+}
+
+func ListFiles(diretorio string) ([]string, error) {
+
+	var arquivos []string
+
+	lista, err := ioutil.ReadDir(diretorio)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, arquivoInfo := range lista {
+		if !arquivoInfo.IsDir() {
+			arquivos = append(arquivos, arquivoInfo.Name())
+		}
+	}
+
+	return arquivos, nil
+}
+
+func LoadFileJSON(caminho string, dados interface{}) error {
+	arquivo, err := os.Open(caminho)
+	if err != nil {
+		return err
+	}
+	defer arquivo.Close()
+
+	byteValue, err := ioutil.ReadAll(arquivo)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(byteValue, dados)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

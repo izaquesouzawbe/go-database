@@ -12,7 +12,7 @@ func commandCreateTable(query string, commands []string) {
 		file.CreateDir(getPathTable(tableName))
 	}
 
-	fields := extractFieldsAndTypes(query)
+	fields := extractFieldsAndTypesCreateTable(query)
 
 	tableData := Table{
 		TableName: tableName,

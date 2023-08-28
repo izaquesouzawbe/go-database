@@ -1,3 +1,5 @@
 1-create database database_name
 2-use database database_name
 3-create table table_teste (campo1 text, campo2 text, campo3 text)
+4-insert into table_teste(campo1, campo2, campo3) values (1, 'abc', 18)
+5-select * from table_teste

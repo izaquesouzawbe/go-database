@@ -9,16 +9,17 @@ func isCommandUseDatabase(commands []string) bool {
 }
 
 func isCommandCreateTable(commands []string) bool {
-	//create table table_name
 	return commands[0] == "create" && commands[1] == "table"
 }
 
 func isCommandAddColumn(commands []string) bool {
-	//add column table teste nome text
 	return commands[0] == "add" && commands[1] == "column" && commands[2] == "table"
 }
 
+func isCommandInsertInto(commands []string) bool {
+	return commands[0] == "insert" && commands[1] == "into"
+}
+
 func isCommandSelectTable(commands []string) bool {
-	//select table teste (id, nome, sobrenome)
-	return commands[0] == "select" && commands[1] == "table"
+	return commands[0] == "select"
 }
