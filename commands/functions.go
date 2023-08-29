@@ -42,6 +42,24 @@ func saveTableConfig(tableData Table) {
 
 }
 
+func getSequenceOfFields(fieldsMap []map[string]string) string {
+
+	for _, field := range fieldsMap {
+		if field["type"] == "sequence" {
+			return field["name"]
+		}
+	}
+
+	return ""
+}
+
+func saveSequenceConfig(sequence Sequence) {
+	file := file.CreateFile(getPathSequence(sequence.Name), true)
+
+	encoder := json.NewEncoder(file)
+	encoder.Encode(sequence)
+}
+
 func saveDatabaseConfig(databaseData Database) {
 
 	file := file.CreateFile(getPathConfigDatabase(), true)
@@ -100,17 +118,45 @@ func extractKeyValueWhere(query string) map[string]string {
 	return nil
 }
 
-func extractFieldsAndTypesCreateTable(input string) map[string]string {
-	result := make(map[string]string)
+func findIndexFields(list []string, value string) int {
+	for i, valor := range list {
+		if valor == value {
+			return i
+		}
+	}
+	return -1
+}
+
+func extractFieldsCreateTable(input string) []Field {
+
+	var result []Field
+
 	re := regexp.MustCompile(`\((.*?)\)`)
 	matches := re.FindStringSubmatch(input)
 
 	if len(matches) == 2 {
+
 		fields := strings.Split(matches[1], ",")
+
 		for _, field := range fields {
 			parts := strings.Split(strings.TrimSpace(field), " ")
-			if len(parts) == 2 {
-				result[parts[0]] = parts[1]
+
+			if len(parts) >= 2 {
+
+				field := Field{
+					Name:    parts[0],
+					Type:    parts[1],
+					NotNull: 0,
+				}
+
+				var index int = 0
+
+				index = findIndexFields(parts, "not_null")
+				if index > 0 {
+					field.NotNull = 1
+				}
+
+				result = append(result, field)
 			}
 		}
 	}

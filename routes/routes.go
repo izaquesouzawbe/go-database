@@ -16,7 +16,7 @@ func CreateRoutes() {
 
 	router := gin.Default()
 
-	router.GET("/table", func(c *gin.Context) {
+	router.GET("/tables", func(c *gin.Context) {
 		c.String(200, TablesInMemory[0])
 	})
 

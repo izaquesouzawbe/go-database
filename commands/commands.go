@@ -26,7 +26,9 @@ func RunCommand(query string) []string {
 		commandUseDatabase(commands)
 
 	case isCommandCreateTable(commands):
-		commandCreateTable(query, commands)
+		stringReturn = commandCreateTable(query, commands)
+	case isCommandCreateSequence(commands):
+		stringReturn = commandCreateSequence(commands)
 
 	case isCommandAddColumn(commands):
 		commandAddColumn(commands)
@@ -48,7 +50,7 @@ func RunCommand(query string) []string {
 }
 
 func commandAddColumn(commands []string) {
-	//add column table teste nome text
+	//add column tables teste nome text
 	columnName := commands[3]
 	columnType := commands[4]
 	table := commands[5]

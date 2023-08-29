@@ -9,12 +9,12 @@ func commandSelectTable(query string) []string {
 
 	table, _ := extractTable(query)
 
-	lines, _ := file.ReadLines(getPathDataTable(table))
+	lines, _ := file.ReadLines(getPathTableDataRecord(table))
 	tamanho := len(lines)
 
 	for _ = range lines {
-		/*	if index <= 100 {
-			fmt.Println(strconv.Itoa(index) + " - " + line)
+		/*	if indexes <= 100 {
+			fmt.Println(strconv.Itoa(indexes) + " - " + line)
 		}*/
 	}
 

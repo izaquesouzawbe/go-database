@@ -1,5 +1,6 @@
 1-create database database_name
 2-use database database_name
-3-create table table_teste (campo1 text, campo2 text, campo3 text)
-4-insert into table_teste(campo1, campo2, campo3) values (1, 'abc', 18)
-5-select * from table_teste
+3-create table teste (id sequence primary_key, nome text, idade integer)
+4-create sequence teste
+5-insert into table_teste(nome, idade) values ('abc', 18)
+6-select * from table_teste

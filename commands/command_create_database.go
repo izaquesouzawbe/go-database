@@ -5,6 +5,12 @@ import "go-database/file"
 func commandCreateDatabase(commands []string) {
 
 	databaseName := commands[2]
-	file.CreateDir(getPathData() + databaseName)
+
+	setPathDatabase(databaseName)
+
+	file.CreateDir(getPathDatabase())
+	file.CreateDir(getPathTables())
+	file.CreateDir(getPathSequences())
+	file.CreateDir(getPathIndexes())
 
 }

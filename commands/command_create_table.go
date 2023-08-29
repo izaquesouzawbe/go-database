@@ -4,33 +4,41 @@ import (
 	"go-database/file"
 )
 
-func commandCreateTable(query string, commands []string) {
+func commandCreateTable(query string, commands []string) []string {
+
+	msg := onValidateCreateTable(query)
+	if len(msg) > 0 {
+		return []string{msg}
+	}
 
 	tableName := commands[2]
+
+	createDirTable(tableName)
+	fields := extractFieldsCreateTable(query)
+
+	tableData := Table{
+		TableName: tableName,
+		Fields:    fields,
+	}
+
+	saveTableConfig(tableData)
+
+	return []string{"Table '" + tableName + "' successfully created!"}
+}
+
+func createDirTable(tableName string) {
 
 	if !file.DirExists(getPathTable(tableName)) {
 		file.CreateDir(getPathTable(tableName))
 	}
 
-	fields := extractFieldsAndTypesCreateTable(query)
-
-	tableData := Table{
-		TableName: tableName,
-		Fields:    getFields(fields),
+	if !file.DirExists(getPathTableData(tableName)) {
+		file.CreateDir(getPathTableData(tableName))
 	}
-
-	saveTableConfig(tableData)
-
 }
 
-func getFields(fields map[string]string) []map[string]string {
+func onValidateCreateTable(query string) string {
 
-	newFields := []map[string]string{}
-
-	for field, fieldType := range fields {
-		newFields = append(newFields, map[string]string{"name": field, "type": fieldType})
-	}
-
-	return newFields
+	return ""
 
 }

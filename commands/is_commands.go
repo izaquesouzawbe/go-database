@@ -12,8 +12,12 @@ func isCommandCreateTable(commands []string) bool {
 	return commands[0] == "create" && commands[1] == "table"
 }
 
+func isCommandCreateSequence(commands []string) bool {
+	return commands[0] == "create" && commands[1] == "sequence"
+}
+
 func isCommandAddColumn(commands []string) bool {
-	return commands[0] == "add" && commands[1] == "column" && commands[2] == "table"
+	return commands[0] == "add" && commands[1] == "column" && commands[2] == "tables"
 }
 
 func isCommandInsertInto(commands []string) bool {
