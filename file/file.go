@@ -44,7 +44,9 @@ func FileExists(filename string) bool {
 	}
 }
 
-func AppendLineToFile(filename string, line string) error {
+func AppendLineToFile(filename string, lines []string) error {
+
+	content := strings.Join(lines, "\n")
 
 	file, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
@@ -52,10 +54,18 @@ func AppendLineToFile(filename string, line string) error {
 	}
 	defer file.Close()
 
-	_, err = fmt.Fprintln(file, line)
+	_, err = file.WriteString(content + "\n")
 	if err != nil {
-		return err
+		fmt.Println("Erro ao gravar no arquivo:", err)
+		return nil
 	}
+
+	/*for _, line := range lines {
+		_, err = fmt.Fprintln(file, line)
+		if err != nil {
+			return err
+		}
+	}*/
 
 	return nil
 }

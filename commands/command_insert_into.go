@@ -1,42 +1,80 @@
 package commands
 
-func commandInsertInto(query string) {
+import (
+	"go-database/file"
+)
 
-	/*insertCommand, _ := extractInsertCommandInfo(query)
-	var tabelaJson Table
+func commandInsertInto(query string, insertCommand *InsertCommand) string {
 
-	err := file.LoadFileJSON(getPathConfigTable(insertCommand.TableName), &tabelaJson)
-	if err != nil {
-		return
+	msg := onValidateInsertInto(query)
+	if len(msg) > 0 {
+		return ""
+	}
+
+	//insertCommand, _ := extractInsertCommandInfo(query)
+
+	msg = onValidateNotNullInsertInto(table.Fields, insertCommand)
+	if len(msg) > 0 {
+		return ""
 	}
 
 	line := ""
 
-	fieldSequence := getSequenceOfFields(tabelaJson.Fields)
-	var sequenceValue int
+	for _, field := range table.Fields {
+		line += getFieldValue(field, insertCommand)
+	}
 
-	/*if len(fieldSequence) > 0 {
-		sequenceValue = getSequenceLastValue(tabelaJson.Sequence)
-	}*/
+	return line
+}
 
-	/*for _, field := range tabelaJson.Fields {
+func commandInsertIntoQuerys(querys []string) []string {
 
-		if len(fieldSequence) > 0 {
-			if field["name"] == fieldSequence {
-				line += strconv.Itoa(sequenceValue) + ";"
-			}
+	insertCommand, _ := extractInsertCommandInfo(querys[0])
+
+	var lines []string
+
+	for _, query := range querys {
+		if len(query) > 0 {
+			lines = append(lines, commandInsertInto(query, insertCommand))
 		}
+	}
 
-		for iColumn, column := range insertCommand.Fields {
+	file.AppendLineToFile(getPathTableDataRecord(insertCommand.TableName), lines)
 
-			if column == field["name"] {
-				line += insertCommand.Values[iColumn] + ";"
-			}
+	return []string{}
+}
 
+func getFieldValue(field Field, insertCommand *InsertCommand) string {
+
+	for iColumn, column := range insertCommand.Fields {
+
+		if column == field.Name {
+			return insertCommand.Values[iColumn] + ";"
 		}
 
 	}
 
-	file.AppendLineToFile(getPathTableDataRecord(insertCommand.TableName), line)*/
+	return ";"
+}
 
+func onValidateInsertInto(query string) string {
+	return ""
+}
+
+func onValidateNotNullInsertInto(fields []Field, insertCommand *InsertCommand) string {
+
+	for _, field := range fields {
+
+		if field.NotNull == 1 {
+			for i, column := range insertCommand.Fields {
+				if field.Name == column && len(insertCommand.Values[i]) > 0 {
+					return ""
+				} else {
+					return "Error: Field '" + field.Name + "' cannot be null"
+				}
+			}
+		}
+	}
+
+	return ""
 }

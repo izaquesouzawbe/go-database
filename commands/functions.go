@@ -23,10 +23,15 @@ func cleanQuery(query string) string {
 	return query
 }
 
-func getListCommand(command string) []string {
+func getCommands(command string) []string {
 
-	stringList := strings.Split(command, " ")
-	return stringList
+	commands := strings.Split(command, " ")
+	return commands
+}
+
+func getQuerys(query string) []string {
+	querys := strings.Split(query, ";")
+	return querys
 }
 
 func reduceToSingleSpace(input string) string {

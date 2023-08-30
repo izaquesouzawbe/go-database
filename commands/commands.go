@@ -4,43 +4,58 @@ import (
 	"fmt"
 	"go-database/file"
 	"go-database/main_aux"
-	"log"
 )
 
-func RunCommand(query string) []string {
+var table Table
+
+func RunCommand(query string, batch bool) []string {
+
+	err := file.LoadFileJSON(getPathConfigTable("teste"), &table)
+	if err != nil {
+		return nil
+	}
 
 	main_aux.RuntimeStarted()
 
-	log.Println("Query: ", query)
-
 	query = cleanQuery(query)
-	commands := getListCommand(query)
+	querys := getQuerys(query)
+
+	//log.Println("Querys: ", querys)
+
+	if batch {
+		commandInsertIntoQuerys(querys)
+		main_aux.RuntimeDone()
+		return []string{}
+	}
 
 	var stringReturn []string
 
-	switch {
-	case isCommandCreateDatabase(commands):
-		commandCreateDatabase(commands)
+	for _, query := range querys {
 
-	case isCommandUseDatabase(commands):
-		commandUseDatabase(commands)
+		commands := getCommands(query)
 
-	case isCommandCreateTable(commands):
-		stringReturn = commandCreateTable(query, commands)
-	case isCommandCreateSequence(commands):
-		stringReturn = commandCreateSequence(commands)
+		switch {
+		case isCommandCreateDatabase(commands):
+			commandCreateDatabase(commands)
 
-	case isCommandAddColumn(commands):
-		commandAddColumn(commands)
+		case isCommandUseDatabase(commands):
+			commandUseDatabase(commands)
 
-	case isCommandInsertInto(commands):
-		commandInsertInto(query)
+		case isCommandCreateTable(commands):
+			stringReturn = commandCreateTable(query, commands)
 
-	case isCommandSelectTable(commands):
-		stringReturn = commandSelectTable(query)
+		case isCommandCreateSequence(commands):
+			stringReturn = commandCreateSequence(commands)
 
-	default:
-		fmt.Println("Command not found")
+		/*case isCommandInsertInto(commands):
+		stringReturn = commandInsertInto(querys)*/
+
+		case isCommandSelectTable(commands):
+			stringReturn = commandSelectTable(query)
+
+		default:
+			fmt.Println("Command not found")
+		}
 	}
 
 	main_aux.RuntimeDone()
@@ -50,23 +65,5 @@ func RunCommand(query string) []string {
 }
 
 func commandAddColumn(commands []string) {
-	//add column tables teste nome text
-	columnName := commands[3]
-	columnType := commands[4]
-	table := commands[5]
-
-	if !file.FileExists(getPathConfigTable(table)) {
-		fmt.Println("Table " + table + " not found...")
-		return
-	}
-
-	line := columnName + ";" + columnType
-
-	err := file.AppendLineToFile(getPathConfigTable(table), line)
-	if err != nil {
-		fmt.Println("Erro ao adicionar nova linha:", err)
-	} else {
-		fmt.Println("Nova linha adicionada com sucesso.")
-	}
 
 }

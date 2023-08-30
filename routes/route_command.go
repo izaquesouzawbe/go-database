@@ -3,7 +3,6 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"go-database/commands"
-	"log"
 )
 
 func commandRoute(c *gin.Context) {
@@ -14,9 +13,9 @@ func commandRoute(c *gin.Context) {
 		return
 	}
 
-	log.Println(command)
+	//log.Println(command)
 
-	lines := commands.RunCommand(command.Query)
+	lines := commands.RunCommand(command.Query, true)
 
 	//fmt.Println(lines)
 
