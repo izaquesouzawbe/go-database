@@ -1,5 +1,7 @@
 package commands
 
+import "go-zdb-api/internal/models"
+
 func commandCreateSequence(commands []string) []string {
 
 	msg := onValidateCreateSequence(commands)
@@ -8,7 +10,7 @@ func commandCreateSequence(commands []string) []string {
 	}
 
 	sequenceName := commands[2]
-	sequence := Sequence{
+	sequence := models.Sequence{
 		Name:           sequenceName,
 		LasValue:       1,
 		IncrementValue: 1,

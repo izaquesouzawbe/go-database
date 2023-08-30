@@ -3,6 +3,7 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
+	"go-zdb-api/internal/models"
 	"go-zdb-api/pkg/file"
 	"regexp"
 	"strings"
@@ -39,7 +40,7 @@ func reduceToSingleSpace(input string) string {
 	return re.ReplaceAllString(input, " ")
 }
 
-func saveTableConfig(tableData Table) {
+func saveTableConfig(tableData models.Table) {
 
 	file := file.CreateFile(getPathConfigTable(tableData.TableName), true)
 	encoder := json.NewEncoder(file)
@@ -58,14 +59,14 @@ func getSequenceOfFields(fieldsMap []map[string]string) string {
 	return ""
 }
 
-func saveSequenceConfig(sequence Sequence) {
+func saveSequenceConfig(sequence models.Sequence) {
 	file := file.CreateFile(getPathSequence(sequence.Name), true)
 
 	encoder := json.NewEncoder(file)
 	encoder.Encode(sequence)
 }
 
-func saveDatabaseConfig(databaseData Database) {
+func saveDatabaseConfig(databaseData models.Database) {
 
 	file := file.CreateFile(getPathConfigDatabase(), true)
 	encoder := json.NewEncoder(file)
@@ -132,9 +133,9 @@ func findIndexFields(list []string, value string) int {
 	return -1
 }
 
-func extractFieldsCreateTable(input string) []Field {
+func extractFieldsCreateTable(input string) []models.Field {
 
-	var result []Field
+	var result []models.Field
 
 	re := regexp.MustCompile(`\((.*?)\)`)
 	matches := re.FindStringSubmatch(input)
@@ -148,7 +149,7 @@ func extractFieldsCreateTable(input string) []Field {
 
 			if len(parts) >= 2 {
 
-				field := Field{
+				field := models.Field{
 					Name:    parts[0],
 					Type:    parts[1],
 					NotNull: 0,
@@ -169,13 +170,7 @@ func extractFieldsCreateTable(input string) []Field {
 	return result
 }
 
-type InsertCommand struct {
-	TableName string
-	Fields    []string
-	Values    []string
-}
-
-func extractInsertCommandInfo(texto string) (*InsertCommand, error) {
+func extractInsertCommandInfo(texto string) (*models.InsertCommand, error) {
 	re := regexp.MustCompile(`insert into ([^\s(]+)\(([^)]+)\) values \(([^)]+)\)`)
 	matches := re.FindStringSubmatch(texto)
 
@@ -190,7 +185,7 @@ func extractInsertCommandInfo(texto string) (*InsertCommand, error) {
 	camposSeparados := regexp.MustCompile(`\s*,\s*`).Split(campos, -1)
 	valoresSeparados := regexp.MustCompile(`\s*,\s*`).Split(valores, -1)
 
-	return &InsertCommand{
+	return &models.InsertCommand{
 		TableName: tabela,
 		Fields:    camposSeparados,
 		Values:    valoresSeparados,

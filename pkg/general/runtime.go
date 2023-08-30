@@ -1,4 +1,4 @@
-package main_aux
+package general
 
 import (
 	"fmt"

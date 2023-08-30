@@ -3,11 +3,12 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"go-zdb-api/internal/commands"
+	"go-zdb-api/internal/models"
 )
 
 func commandRoute(c *gin.Context) {
 
-	var command Command
+	var command models.Command
 	err := c.BindJSON(&command)
 	if err != nil {
 		return

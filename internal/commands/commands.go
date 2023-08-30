@@ -2,11 +2,12 @@ package commands
 
 import (
 	"fmt"
+	"go-zdb-api/internal/models"
 	"go-zdb-api/pkg/file"
-	"go-zdb-api/pkg/main_aux"
+	"go-zdb-api/pkg/general"
 )
 
-var table Table
+var table models.Table
 
 func RunCommand(query string, batch bool) []string {
 
@@ -15,7 +16,7 @@ func RunCommand(query string, batch bool) []string {
 		return nil
 	}
 
-	main_aux.RuntimeStarted()
+	general.RuntimeStarted()
 
 	query = cleanQuery(query)
 	querys := getQuerys(query)
@@ -24,7 +25,7 @@ func RunCommand(query string, batch bool) []string {
 
 	if batch {
 		commandInsertIntoQuerys(querys)
-		main_aux.RuntimeDone()
+		general.RuntimeDone()
 		return []string{}
 	}
 
@@ -58,7 +59,7 @@ func RunCommand(query string, batch bool) []string {
 		}
 	}
 
-	main_aux.RuntimeDone()
+	general.RuntimeDone()
 
 	return stringReturn
 

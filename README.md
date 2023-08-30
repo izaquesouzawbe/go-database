@@ -2,9 +2,15 @@
 
 # Sintaxe
 
-1-create table table_name (id int not_null, nome varchar(50), observacao text, saldo numeric(10,2));
+1. CREATE TABLE
+```zql
+    create table table_name (id int not_null, nome varchar(50), observacao text, saldo numeric(10,2));
+```
 
-2-create sequence(seq_table_name_id);
+2. CRAETE SEQUENCE
+```zql
+   create sequence(seq_table_name_id);
+```
 
 3-create unique(unique_table_name_id) table(table_name) column(id)
 

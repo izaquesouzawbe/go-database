@@ -1,8 +1,11 @@
 package commands
 
-import "go-zdb-api/pkg/file"
+import (
+	"go-zdb-api/internal/models"
+	"go-zdb-api/pkg/file"
+)
 
-func commandInsertInto(query string, insertCommand *InsertCommand) string {
+func commandInsertInto(query string, insertCommand *models.InsertCommand) string {
 
 	msg := onValidateInsertInto(query)
 	if len(msg) > 0 {
@@ -42,7 +45,7 @@ func commandInsertIntoQuerys(querys []string) []string {
 	return []string{}
 }
 
-func getFieldValue(field Field, insertCommand *InsertCommand) string {
+func getFieldValue(field models.Field, insertCommand *models.InsertCommand) string {
 
 	for iColumn, column := range insertCommand.Fields {
 
@@ -59,7 +62,7 @@ func onValidateInsertInto(query string) string {
 	return ""
 }
 
-func onValidateNotNullInsertInto(fields []Field, insertCommand *InsertCommand) string {
+func onValidateNotNullInsertInto(fields []models.Field, insertCommand *models.InsertCommand) string {
 
 	for _, field := range fields {
 

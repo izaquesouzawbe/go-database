@@ -2,24 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-zdb-api/internal/commands"
 )
-
-var TablesInMemory []commands.Table
-
-type TypeCommand string
-
-const (
-	Database TypeCommand = "Database"
-	Table    TypeCommand = "Table"
-	Sequence TypeCommand = "Sequence"
-	Insert   TypeCommand = "Insert"
-)
-
-type Command struct {
-	Type  TypeCommand `json:"type"`
-	Query string      `json:"query"`
-}
 
 func CreateRoutes() {
 
