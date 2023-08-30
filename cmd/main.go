@@ -1,10 +1,16 @@
 package main
 
 import (
-	"go-database/commands"
-	"go-database/routes"
-	"go-database/scheduled"
+	"go-zdb-api/internal/commands"
+	"go-zdb-api/internal/routes"
+	"go-zdb-api/internal/scheduled"
 )
+
+func main() {
+
+	before()
+
+}
 
 func before() {
 

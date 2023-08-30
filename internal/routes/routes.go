@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-database/commands"
+	"go-zdb-api/internal/commands"
 )
 
 var TablesInMemory []commands.Table

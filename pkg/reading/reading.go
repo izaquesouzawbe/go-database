@@ -3,7 +3,6 @@ package reading
 import (
 	"bufio"
 	"fmt"
-	"go-database/commands"
 	"os"
 )
 
@@ -18,12 +17,12 @@ func ReadInput() {
 
 		fmt.Print(":~# ")
 
-		line, err := reader.ReadString('\n')
+		_, err := reader.ReadString('\n')
 		if err != nil {
 			fmt.Println("Erro ao ler a entrada:", err)
 			return
 		}
 
-		commands.RunCommand(line)
+		//commands.RunCommand(line)
 	}
 }

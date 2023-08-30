@@ -3,7 +3,7 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
-	"go-database/file"
+	"go-zdb-api/pkg/file"
 	"regexp"
 	"strings"
 )

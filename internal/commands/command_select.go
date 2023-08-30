@@ -2,7 +2,7 @@ package commands
 
 import (
 	"fmt"
-	"go-database/file"
+	"go-zdb-api/pkg/file"
 )
 
 func commandSelectTable(query string) []string {

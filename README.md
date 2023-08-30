@@ -1,6 +1,6 @@
 # go-zdb-api
 
-#Sintaxe
+# Sintaxe
 
 1-create table table_name (id int not_null, nome varchar(50), observacao text, saldo numeric(10,2));
 

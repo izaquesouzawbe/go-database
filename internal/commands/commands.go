@@ -2,8 +2,8 @@ package commands
 
 import (
 	"fmt"
-	"go-database/file"
-	"go-database/main_aux"
+	"go-zdb-api/pkg/file"
+	"go-zdb-api/pkg/main_aux"
 )
 
 var table Table

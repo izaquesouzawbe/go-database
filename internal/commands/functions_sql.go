@@ -1,6 +1,6 @@
 package commands
 
-import "go-database/file"
+import "go-zdb-api/pkg/file"
 
 func getSequenceLastValue(sequenceName string) int {
 
