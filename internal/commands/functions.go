@@ -102,11 +102,14 @@ func extractColumnsSelect(query string) []string {
 }
 
 func extractKeyValueWhere(query string) map[string]string {
-	re := regexp.MustCompile(`WHERE\s+(.*?)$`)
+
+	re := regexp.MustCompile(`where\s+(.*?)$`)
+
 	matches := re.FindStringSubmatch(query)
+
 	if len(matches) >= 2 {
 		conditions := strings.TrimSpace(matches[1])
-		pairs := strings.Split(conditions, " AND ")
+		pairs := strings.Split(conditions, " and ")
 		keyValuePairs := make(map[string]string)
 
 		for _, pair := range pairs {

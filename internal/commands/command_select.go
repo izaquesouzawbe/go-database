@@ -4,22 +4,61 @@ import (
 	"fmt"
 	"go-zdb-api/internal/global"
 	"go-zdb-api/pkg/file"
+	"strings"
 )
 
-func commandSelectTable(query string) []string {
+func commandSelectTable(query string) []map[string]string {
+	tableName, _ := extractTable(query)
+	wheres := extractKeyValueWhere(query)
 
-	table, _ := extractTable(query)
+	lines, _ := file.ReadLines(global.GetPathTableDataRecord(tableName))
 
-	lines, _ := file.ReadLines(global.GetPathTableDataRecord(table))
-	tamanho := len(lines)
+	file.LoadFileJSON(global.GetPathTableConfig(tableName), &table)
 
-	for _ = range lines {
-		/*	if indexes <= 100 {
-			fmt.Println(strconv.Itoa(indexes) + " - " + line)
-		}*/
+	var records []map[string]string
+
+	for _, line := range lines {
+
+		if len(line) > 0 {
+
+			lineFree := false
+
+			linesValue := strings.Split(line, ";")
+			record := make(map[string]string)
+
+			for i, field := range table.Fields {
+				record[field.Name] = linesValue[i]
+
+				if len(wheres) > 0 {
+
+					for whereField, whereValue := range wheres {
+
+						if whereField == field.Name && strings.ToLower(linesValue[i]) == whereValue {
+							lineFree = true
+						}
+					}
+				} else {
+					lineFree = true
+				}
+			}
+
+			if lineFree {
+				records = append(records, record)
+			}
+		}
+
 	}
 
-	fmt.Println("count: ", tamanho)
+	return records
+}
 
-	return lines
+func converter(data []map[string]string) string {
+
+	em_string := ""
+	for _, item := range data {
+		for key, value := range item {
+			em_string += fmt.Sprintf("%s: %s\n", key, value)
+		}
+	}
+	return em_string
 }

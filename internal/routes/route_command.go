@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-zdb-api/internal/commands"
 	"go-zdb-api/internal/models/request"
+	"net/http"
 )
 
 func routeCommand(c *gin.Context) {
@@ -16,5 +17,6 @@ func routeCommand(c *gin.Context) {
 
 	lines := commands.RunCommand(command.Value)
 
-	c.JSON(200, lines)
+	c.String(http.StatusOK, string(lines))
+	//c.JSON(200)
 }

@@ -8,7 +8,7 @@ import (
 
 var table command.Table
 
-func RunCommand(command string) []string {
+func RunCommand(command string) string []map[string]string {
 
 	general.RuntimeStarted()
 
@@ -20,8 +20,6 @@ func RunCommand(command string) []string {
 		general.RuntimeDone()
 		return []string{}
 	}*/
-
-	var stringReturn []string
 
 	for _, query := range querys {
 
@@ -35,16 +33,16 @@ func RunCommand(command string) []string {
 			commandUseDatabase(commands)
 
 		case isCommandCreateTable(commands):
-			stringReturn = commandCreateTable(query, commands)
+			commandCreateTable(query, commands)
 
 		case isCommandCreateSequence(commands):
-			stringReturn = commandCreateSequence(commands)
+			commandCreateSequence(commands)
 
 		case isCommandInsertInto(commands):
-			stringReturn = []string{commandInsertInto(query)}
+			commandInsertInto(query)
 
 		case isCommandSelectTable(commands):
-			stringReturn = commandSelectTable(query)
+			return commandSelectTable(query)
 
 		default:
 			fmt.Println("Command not found")
@@ -52,8 +50,7 @@ func RunCommand(command string) []string {
 	}
 
 	general.RuntimeDone()
-
-	return stringReturn
+	return nil
 
 }
 
