@@ -1,4 +1,4 @@
-package models
+package command
 
 type Field struct {
 	Name    string `json:"name"`

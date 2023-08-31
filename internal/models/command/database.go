@@ -1,4 +1,4 @@
-package models
+package command
 
 type Database struct {
 	Name   string   `json:"name"`

@@ -2,7 +2,7 @@ package commands
 
 import (
 	"go-zdb-api/internal/global"
-	"go-zdb-api/internal/models"
+	"go-zdb-api/internal/models/command"
 	"go-zdb-api/pkg/file"
 )
 
@@ -18,7 +18,7 @@ func commandCreateTable(query string, commands []string) []string {
 	createDirTable(tableName)
 	fields := extractFieldsCreateTable(query)
 
-	tableData := models.Table{
+	tableData := command.Table{
 		TableName: tableName,
 		Fields:    fields,
 	}

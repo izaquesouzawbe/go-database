@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go-zdb-api/internal/global"
-	"go-zdb-api/internal/models"
+	"go-zdb-api/internal/models/command"
 	"go-zdb-api/pkg/file"
 	"regexp"
 	"strings"
@@ -41,7 +41,7 @@ func reduceToSingleSpace(input string) string {
 	return re.ReplaceAllString(input, " ")
 }
 
-func saveTableConfig(tableData models.Table) {
+func saveTableConfig(tableData command.Table) {
 
 	file := file.CreateFile(global.GetPathTableConfig(tableData.TableName), true)
 	encoder := json.NewEncoder(file)
@@ -60,14 +60,14 @@ func getSequenceOfFields(fieldsMap []map[string]string) string {
 	return ""
 }
 
-func saveSequenceConfig(sequence models.Sequence) {
+func saveSequenceConfig(sequence command.Sequence) {
 	file := file.CreateFile(global.GetPathSequence(sequence.Name), true)
 
 	encoder := json.NewEncoder(file)
 	encoder.Encode(sequence)
 }
 
-func saveDatabaseConfig(databaseData models.Database) {
+func saveDatabaseConfig(databaseData command.Database) {
 
 	file := file.CreateFile(global.GetPathConfigDatabase(), true)
 	encoder := json.NewEncoder(file)
@@ -134,9 +134,9 @@ func findIndexFields(list []string, value string) int {
 	return -1
 }
 
-func extractFieldsCreateTable(input string) []models.Field {
+func extractFieldsCreateTable(input string) []command.Field {
 
-	var result []models.Field
+	var result []command.Field
 
 	re := regexp.MustCompile(`\((.*?)\)`)
 	matches := re.FindStringSubmatch(input)
@@ -150,7 +150,7 @@ func extractFieldsCreateTable(input string) []models.Field {
 
 			if len(parts) >= 2 {
 
-				field := models.Field{
+				field := command.Field{
 					Name:    parts[0],
 					Type:    parts[1],
 					NotNull: 0,
@@ -171,7 +171,7 @@ func extractFieldsCreateTable(input string) []models.Field {
 	return result
 }
 
-func extractInsertCommand(texto string) (*models.InsertCommand, error) {
+func extractInsertCommand(texto string) (*command.InsertCommand, error) {
 	re := regexp.MustCompile(`insert into ([^\s(]+)\(([^)]+)\)`)
 	matches := re.FindStringSubmatch(texto)
 
@@ -184,13 +184,13 @@ func extractInsertCommand(texto string) (*models.InsertCommand, error) {
 
 	camposSeparados := regexp.MustCompile(`\s*,\s*`).Split(campos, -1)
 
-	return &models.InsertCommand{
+	return &command.InsertCommand{
 		TableName: tabela,
 		Fields:    camposSeparados,
 	}, nil
 }
 
-func extractInsertCommandValues(texto string) (*models.InsertCommandValues, error) {
+func extractInsertCommandValues(texto string) (*command.InsertCommandValues, error) {
 
 	re := regexp.MustCompile(`values \(([^)]+)\)`)
 	matches := re.FindStringSubmatch(texto)
@@ -203,7 +203,7 @@ func extractInsertCommandValues(texto string) (*models.InsertCommandValues, erro
 
 	valoresSeparados := regexp.MustCompile(`\s*,\s*`).Split(values, -1)
 
-	return &models.InsertCommandValues{
+	return &command.InsertCommandValues{
 		Values: valoresSeparados,
 	}, nil
 }

@@ -2,11 +2,11 @@ package commands
 
 import (
 	"fmt"
-	"go-zdb-api/internal/models"
+	"go-zdb-api/internal/models/command"
 	"go-zdb-api/pkg/general"
 )
 
-var table models.Table
+var table command.Table
 
 func RunCommand(command string) []string {
 

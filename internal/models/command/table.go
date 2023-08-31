@@ -1,4 +1,4 @@
-package models
+package command
 
 type Table struct {
 	TableName string  `json:"table_name"`

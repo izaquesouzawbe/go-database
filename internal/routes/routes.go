@@ -8,11 +8,9 @@ func CreateRoutes() {
 
 	router := gin.Default()
 
-	router.GET("/tables", func(c *gin.Context) {
-		c.String(200, "TablesInMemory[0]")
-	})
-
-	router.POST("/command", commandRoute)
+	router.POST("/command", routeCommand)
+	router.POST("/insert", routeInsert)
+	router.POST("/insertTableColumn", routeInsert)
 
 	router.Run()
 }

@@ -2,13 +2,13 @@ package commands
 
 import (
 	"go-zdb-api/internal/global"
-	"go-zdb-api/internal/models"
+	"go-zdb-api/internal/models/command"
 	"go-zdb-api/pkg/file"
 )
 
 func getSequenceLastValue(sequenceName string) int {
 
-	var sequenceJson models.Sequence
+	var sequenceJson command.Sequence
 
 	err := file.LoadFileJSON(global.GetPathSequence(sequenceName), &sequenceJson)
 	if err != nil {
