@@ -14,6 +14,5 @@ func commandCreateDatabase(commands []string) {
 	file.CreateDir(global.GetPathDatabase())
 	file.CreateDir(global.GetPathTables())
 	file.CreateDir(global.GetPathSequences())
-	file.CreateDir(global.GetPathIndexes())
 
 }

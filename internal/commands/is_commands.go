@@ -27,3 +27,7 @@ func isCommandInsertInto(commands []string) bool {
 func isCommandSelectTable(commands []string) bool {
 	return commands[0] == "select"
 }
+
+func isCommandCreateUnique(commands []string) bool {
+	return commands[0] == "create" && commands[1] == "unique"
+}

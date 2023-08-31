@@ -8,7 +8,7 @@ import (
 
 var table command.Table
 
-func RunCommand(command string) string []map[string]string {
+func RunCommand(command string) []map[string]string {
 
 	general.RuntimeStarted()
 
@@ -25,6 +25,8 @@ func RunCommand(command string) string []map[string]string {
 
 		commands := getCommands(query)
 
+		fmt.Println(commands)
+
 		switch {
 		case isCommandCreateDatabase(commands):
 			commandCreateDatabase(commands)
@@ -37,6 +39,9 @@ func RunCommand(command string) string []map[string]string {
 
 		case isCommandCreateSequence(commands):
 			commandCreateSequence(commands)
+
+		case isCommandCreateUnique(commands):
+			commandCreateUnique(query)
 
 		case isCommandInsertInto(commands):
 			commandInsertInto(query)

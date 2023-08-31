@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"fmt"
 	"go-zdb-api/internal/global"
 	"go-zdb-api/pkg/file"
 	"strings"
@@ -29,6 +28,7 @@ func commandSelectTable(query string) []map[string]string {
 			for i, field := range table.Fields {
 				record[field.Name] = linesValue[i]
 
+				//WHERE
 				if len(wheres) > 0 {
 
 					for whereField, whereValue := range wheres {
@@ -50,15 +50,4 @@ func commandSelectTable(query string) []map[string]string {
 	}
 
 	return records
-}
-
-func converter(data []map[string]string) string {
-
-	em_string := ""
-	for _, item := range data {
-		for key, value := range item {
-			em_string += fmt.Sprintf("%s: %s\n", key, value)
-		}
-	}
-	return em_string
 }
