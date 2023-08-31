@@ -3,31 +3,23 @@ package commands
 import (
 	"fmt"
 	"go-zdb-api/internal/models"
-	"go-zdb-api/pkg/file"
 	"go-zdb-api/pkg/general"
 )
 
 var table models.Table
 
-func RunCommand(query string, batch bool) []string {
-
-	err := file.LoadFileJSON(getPathConfigTable("teste"), &table)
-	if err != nil {
-		return nil
-	}
+func RunCommand(command string) []string {
 
 	general.RuntimeStarted()
 
-	query = cleanQuery(query)
-	querys := getQuerys(query)
+	command = cleanCommand(command)
+	querys := getQuerys(command)
 
-	//log.Println("Querys: ", querys)
-
-	if batch {
+	/*	if batch {
 		commandInsertIntoQuerys(querys)
 		general.RuntimeDone()
 		return []string{}
-	}
+	}*/
 
 	var stringReturn []string
 
@@ -48,8 +40,8 @@ func RunCommand(query string, batch bool) []string {
 		case isCommandCreateSequence(commands):
 			stringReturn = commandCreateSequence(commands)
 
-		/*case isCommandInsertInto(commands):
-		stringReturn = commandInsertInto(querys)*/
+		case isCommandInsertInto(commands):
+			stringReturn = []string{commandInsertInto(query)}
 
 		case isCommandSelectTable(commands):
 			stringReturn = commandSelectTable(query)

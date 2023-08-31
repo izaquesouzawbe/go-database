@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"go-zdb-api/internal/global"
 	"go-zdb-api/internal/models"
 	"go-zdb-api/pkg/file"
 )
@@ -29,12 +30,12 @@ func commandCreateTable(query string, commands []string) []string {
 
 func createDirTable(tableName string) {
 
-	if !file.DirExists(getPathTable(tableName)) {
-		file.CreateDir(getPathTable(tableName))
+	if !file.DirExists(global.GetPathTable(tableName)) {
+		file.CreateDir(global.GetPathTable(tableName))
 	}
 
-	if !file.DirExists(getPathTableData(tableName)) {
-		file.CreateDir(getPathTableData(tableName))
+	if !file.DirExists(global.GetPathTableData(tableName)) {
+		file.CreateDir(global.GetPathTableData(tableName))
 	}
 }
 

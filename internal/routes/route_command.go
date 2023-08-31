@@ -14,11 +14,7 @@ func commandRoute(c *gin.Context) {
 		return
 	}
 
-	//log.Println(command)
-
-	lines := commands.RunCommand(command.Query, true)
-
-	//fmt.Println(lines)
+	lines := commands.RunCommand(command.Value)
 
 	c.JSON(200, lines)
 }

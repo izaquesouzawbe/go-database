@@ -1,56 +1,57 @@
 package commands
 
 import (
+	"go-zdb-api/internal/global"
 	"go-zdb-api/internal/models"
 	"go-zdb-api/pkg/file"
 )
 
-func commandInsertInto(query string, insertCommand *models.InsertCommand) string {
+func commandInsertInto(query string) string {
 
 	msg := onValidateInsertInto(query)
 	if len(msg) > 0 {
 		return ""
 	}
 
-	//insertCommand, _ := extractInsertCommandInfo(query)
+	insertCommand, _ := extractInsertCommand(query)
+	table := global.GetTableInMemory(insertCommand.TableName)
 
-	msg = onValidateNotNullInsertInto(table.Fields, insertCommand)
+	insertCommandValues, _ := extractInsertCommandValues(query)
+
+	msg = onValidateNotNullInsertInto(table.Fields, insertCommand, insertCommandValues)
 	if len(msg) > 0 {
 		return ""
 	}
 
 	line := ""
-
 	for _, field := range table.Fields {
-		line += getFieldValue(field, insertCommand)
+		line += getFieldValue(field, insertCommand, insertCommandValues)
 	}
+
+	file.AppendLineToFile(global.GetPathTableDataRecord(insertCommand.TableName), []string{line})
 
 	return line
 }
 
 func commandInsertIntoQuerys(querys []string) []string {
 
-	insertCommand, _ := extractInsertCommandInfo(querys[0])
-
 	var lines []string
 
 	for _, query := range querys {
 		if len(query) > 0 {
-			lines = append(lines, commandInsertInto(query, insertCommand))
+			lines = append(lines, commandInsertInto(query))
 		}
 	}
-
-	file.AppendLineToFile(getPathTableDataRecord(insertCommand.TableName), lines)
 
 	return []string{}
 }
 
-func getFieldValue(field models.Field, insertCommand *models.InsertCommand) string {
+func getFieldValue(field models.Field, insertCommand *models.InsertCommand, insertCommandValues *models.InsertCommandValues) string {
 
 	for iColumn, column := range insertCommand.Fields {
 
 		if column == field.Name {
-			return insertCommand.Values[iColumn] + ";"
+			return insertCommandValues.Values[iColumn] + ";"
 		}
 
 	}
@@ -62,13 +63,13 @@ func onValidateInsertInto(query string) string {
 	return ""
 }
 
-func onValidateNotNullInsertInto(fields []models.Field, insertCommand *models.InsertCommand) string {
+func onValidateNotNullInsertInto(fields []models.Field, insertCommand *models.InsertCommand, insertCommandValues *models.InsertCommandValues) string {
 
 	for _, field := range fields {
 
 		if field.NotNull == 1 {
 			for i, column := range insertCommand.Fields {
-				if field.Name == column && len(insertCommand.Values[i]) > 0 {
+				if field.Name == column && len(insertCommandValues.Values[i]) > 0 {
 					return ""
 				} else {
 					return "Error: Field '" + field.Name + "' cannot be null"
