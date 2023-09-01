@@ -1,4 +1,4 @@
-package commands
+package commands_func
 
 import (
 	"fmt"
@@ -7,10 +7,8 @@ import (
 	"strings"
 )
 
-func extractUniqueName(query string) string {
-
-	padrao := `unique\s*\((.*?)\)`
-	r := regexp.MustCompile(padrao)
+func ExtractRegex(query string, expression string) string {
+	r := regexp.MustCompile(expression)
 	correspondencias := r.FindStringSubmatch(query)
 
 	if len(correspondencias) > 1 {
@@ -20,32 +18,42 @@ func extractUniqueName(query string) string {
 	}
 }
 
-func extractUniqueTable(query string) string {
-	padrao := `table\s*\((.*?)\)`
-	r := regexp.MustCompile(padrao)
-	correspondencias := r.FindStringSubmatch(query)
+func ExtractRegexSeparator(query string, expression string, separator string) []string {
 
-	if len(correspondencias) > 1 {
-		return correspondencias[1]
-	} else {
-		return ""
-	}
-}
-
-func extractUniqueColumns(query string) []string {
-	padrao := `column\s*\((.*?)\)`
-	r := regexp.MustCompile(padrao)
-	correspondencias := r.FindStringSubmatch(query)
-
-	if len(correspondencias) > 1 {
-		colunas := strings.Split(correspondencias[1], ", ")
-		return colunas
+	retorno := ExtractRegex(query, expression)
+	if len(retorno) > 0 {
+		return strings.Split(retorno, separator)
 	} else {
 		return nil
 	}
+
 }
 
-func extractTable(query string) (string, error) {
+func ExtractUniqueName(query string) string {
+	return ExtractRegex(query, `unique\s*\((.*?)\)`)
+}
+
+func ExtractUniqueTable(query string) string {
+	return ExtractRegex(query, `table\s*\((.*?)\)`)
+}
+
+func ExtractUniqueColumns(query string) []string {
+	return ExtractRegexSeparator(query, `columns\s*\((.*?)\)`, ", ")
+}
+
+func ExtractInsertTable(query string) string {
+	return ExtractRegex(query, `insert into (\w+)`)
+}
+
+func ExtractInsertColumns(query string) []string {
+	return ExtractRegexSeparator(query, `columns\s*\((.*?)\)`, ", ")
+}
+
+func ExtractInsertValues(query string) []string {
+	return ExtractRegexSeparator(query, `values\s*\((.*?)\)`, ", ")
+}
+
+func ExtractTableSelect(query string) (string, error) {
 	re := regexp.MustCompile(`from\s+([^\s;]+)`)
 	matches := re.FindStringSubmatch(query)
 
@@ -56,7 +64,7 @@ func extractTable(query string) (string, error) {
 	return matches[1], nil
 }
 
-func extractColumnsSelect(query string) []string {
+func ExtractColumnsSelect(query string) []string {
 
 	re := regexp.MustCompile(`SELECT\s+(.*?)\s+FROM`)
 	matches := re.FindStringSubmatch(query)
@@ -71,7 +79,7 @@ func extractColumnsSelect(query string) []string {
 
 }
 
-func extractKeyValueWhere(query string) map[string]string {
+func ExtractKeyValueWhere(query string) map[string]string {
 
 	re := regexp.MustCompile(`where\s+(.*?)$`)
 
@@ -98,7 +106,7 @@ func extractKeyValueWhere(query string) map[string]string {
 	return nil
 }
 
-func extractFieldsCreateTable(input string) []command.Field {
+func ExtractFieldsCreateTable(input string) []command.Field {
 
 	var result []command.Field
 
@@ -135,7 +143,7 @@ func extractFieldsCreateTable(input string) []command.Field {
 	return result
 }
 
-func extractInsertCommand(texto string) (*command.InsertCommand, error) {
+func ExtractInsertCommand(texto string) (*command.InsertCommand, error) {
 	re := regexp.MustCompile(`insert into ([^\s(]+)\(([^)]+)\)`)
 	matches := re.FindStringSubmatch(texto)
 
@@ -154,7 +162,7 @@ func extractInsertCommand(texto string) (*command.InsertCommand, error) {
 	}, nil
 }
 
-func extractInsertCommandValues(texto string) (*command.InsertCommandValues, error) {
+func ExtractInsertCommandValues(texto string) (*command.InsertCommandValues, error) {
 
 	re := regexp.MustCompile(`values \(([^)]+)\)`)
 	matches := re.FindStringSubmatch(texto)

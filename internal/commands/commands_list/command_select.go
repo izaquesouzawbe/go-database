@@ -1,18 +1,19 @@
-package commands
+package commands_list
 
 import (
+	"go-zdb-api/internal/commands/commands_func"
 	"go-zdb-api/internal/global"
 	"go-zdb-api/pkg/file"
 	"strings"
 )
 
-func commandSelectTable(query string) []map[string]string {
-	tableName, _ := extractTable(query)
-	wheres := extractKeyValueWhere(query)
+func CommandSelectTable(query string) []map[string]string {
+	tableName, _ := commands_func.ExtractTableSelect(query)
+	wheres := commands_func.ExtractKeyValueWhere(query)
 
 	lines, _ := file.ReadLines(global.GetPathTableDataRecord(tableName))
 
-	file.LoadFileJSON(global.GetPathTableConfig(tableName), &table)
+	table := global.GetTableInMemory(tableName)
 
 	var records []map[string]string
 

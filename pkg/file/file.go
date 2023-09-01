@@ -8,29 +8,6 @@ import (
 	"strings"
 )
 
-func CreateDir(nameDir string) {
-	err := os.Mkdir(nameDir, os.ModePerm)
-	if err != nil {
-		fmt.Println("Erro ao criar a pasta:", err)
-	} else {
-		fmt.Println("Pasta criada com sucesso!")
-	}
-}
-
-func DirExists(path string) bool {
-
-	_, err := os.Stat(path)
-	if err == nil {
-		return true // A pasta existe
-	} else if os.IsNotExist(err) {
-		return false // A pasta não existe
-	} else {
-		// Tratar outros erros
-		fmt.Println("Ocorreu um erro ao verificar a pasta:", err)
-		return false
-	}
-}
-
 func FileExists(filename string) bool {
 	_, err := os.Stat(filename)
 	if err == nil {
@@ -60,13 +37,6 @@ func AppendLineToFile(filename string, lines []string) error {
 		return nil
 	}
 
-	/*for _, line := range lines {
-		_, err = fmt.Fprintln(file, line)
-		if err != nil {
-			return err
-		}
-	}*/
-
 	return nil
 }
 
@@ -86,22 +56,6 @@ func CreateFile(nameFile string, returnValue bool) *os.File {
 
 }
 
-func OpenFile(nameFile string) *os.File {
-
-	file, err := os.Open(nameFile)
-	if err != nil {
-		fmt.Println("Erro ao criar o arquivo:", err)
-		return nil
-	}
-
-	return file
-
-}
-
-func CloseFile(file *os.File) {
-	defer file.Close()
-}
-
 func ReadLines(filename string) ([]string, error) {
 
 	content, err := ioutil.ReadFile(filename)
@@ -111,24 +65,6 @@ func ReadLines(filename string) ([]string, error) {
 
 	lines := strings.Split(string(content), "\n")
 	return lines, nil
-}
-
-func ListFiles(diretorio string) ([]string, error) {
-
-	var arquivos []string
-
-	lista, err := ioutil.ReadDir(diretorio)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, arquivoInfo := range lista {
-		if !arquivoInfo.IsDir() {
-			arquivos = append(arquivos, arquivoInfo.Name())
-		}
-	}
-
-	return arquivos, nil
 }
 
 func LoadFileJSON(caminho string, dados interface{}) error {

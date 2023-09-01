@@ -1,18 +1,18 @@
-package commands
+package commands_func
 
 import (
-	"go-zdb-api/pkg/file"
+	"go-zdb-api/pkg/dir"
 	"regexp"
 	"strings"
 )
 
 func CreateDirData() {
-	if !file.DirExists("data/") {
-		file.CreateDir("data/")
+	if !dir.DirExists("data/") {
+		dir.CreateDir("data/")
 	}
 }
 
-func cleanCommand(query string) string {
+func CleanCommand(query string) string {
 
 	query = strings.ToLower(query)
 	query = strings.TrimSpace(query)
@@ -21,13 +21,13 @@ func cleanCommand(query string) string {
 	return query
 }
 
-func getCommands(command string) []string {
+func GetCommands(command string) []string {
 
 	commands := strings.Split(command, " ")
 	return commands
 }
 
-func getQuerys(query string) []string {
+func GetQuerys(query string) []string {
 	querys := strings.Split(query, ";")
 	return querys
 }

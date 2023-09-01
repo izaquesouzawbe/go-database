@@ -1,8 +1,8 @@
-package commands
+package commands_list
 
 import "go-zdb-api/internal/global"
 
-func commandUseDatabase(commands []string) {
+func CommandUseDatabase(commands []string) {
 
 	databaseName := commands[2]
 	global.SetPathDatabase(databaseName)

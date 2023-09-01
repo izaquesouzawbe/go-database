@@ -1,56 +1,53 @@
 package commands
 
 import (
-	"fmt"
-	"go-zdb-api/internal/models/command"
+	"go-zdb-api/internal/commands/commands_func"
+	"go-zdb-api/internal/commands/commands_list"
 	"go-zdb-api/pkg/general"
+	"log"
 )
-
-var table command.Table
 
 func RunCommand(command string) []map[string]string {
 
 	general.RuntimeStarted()
 
-	command = cleanCommand(command)
-	querys := getQuerys(command)
-
-	/*	if batch {
-		commandInsertIntoQuerys(querys)
-		general.RuntimeDone()
-		return []string{}
-	}*/
+	command = commands_func.CleanCommand(command)
+	querys := commands_func.GetQuerys(command)
 
 	for _, query := range querys {
 
-		commands := getCommands(query)
+		if len(query) == 0 {
+			continue
+		}
 
-		fmt.Println(commands)
+		log.Println("Query: " + query)
+
+		commands := commands_func.GetCommands(query)
 
 		switch {
-		case isCommandCreateDatabase(commands):
-			commandCreateDatabase(commands)
+		case commands_func.IsCommandCreateDatabase(commands):
+			commands_list.CommandCreateDatabase(commands)
 
-		case isCommandUseDatabase(commands):
-			commandUseDatabase(commands)
+		case commands_func.IsCommandUseDatabase(commands):
+			commands_list.CommandUseDatabase(commands)
 
-		case isCommandCreateTable(commands):
-			commandCreateTable(query, commands)
+		case commands_func.IsCommandCreateTable(commands):
+			commands_list.CommandCreateTable(query, commands)
 
-		case isCommandCreateSequence(commands):
-			commandCreateSequence(commands)
+		case commands_func.IsCommandCreateSequence(commands):
+			commands_list.CommandCreateSequence(commands)
 
-		case isCommandCreateUnique(commands):
-			commandCreateUnique(query)
+		case commands_func.IsCommandCreateUnique(commands):
+			commands_list.CommandCreateUnique(query)
 
-		case isCommandInsertInto(commands):
-			commandInsertInto(query)
+		case commands_func.IsCommandInsertInto(commands):
+			commands_list.CommandInsertInto(query)
 
-		case isCommandSelectTable(commands):
-			return commandSelectTable(query)
+		case commands_func.IsCommandSelectTable(commands):
+			return commands_list.CommandSelectTable(query)
 
 		default:
-			fmt.Println("Command not found")
+			log.Println("Command not found")
 		}
 	}
 

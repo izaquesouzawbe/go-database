@@ -1,10 +1,11 @@
-package commands
+package commands_list
 
 import (
+	"go-zdb-api/internal/commands/commands_func"
 	"go-zdb-api/internal/models/command"
 )
 
-func commandCreateSequence(commands []string) []string {
+func CommandCreateSequence(commands []string) []string {
 
 	msg := onValidateCreateSequence(commands)
 	if len(msg) > 0 {
@@ -18,7 +19,7 @@ func commandCreateSequence(commands []string) []string {
 		IncrementValue: 1,
 	}
 
-	saveSequenceConfig(sequence)
+	commands_func.SaveSequenceConfig(sequence)
 
 	return []string{"Sequence '" + sequenceName + "' successfully created!"}
 

@@ -1,12 +1,13 @@
-package commands
+package commands_list
 
 import (
+	"go-zdb-api/internal/commands/commands_func"
 	"go-zdb-api/internal/global"
 	"go-zdb-api/internal/models/command"
-	"go-zdb-api/pkg/file"
+	"go-zdb-api/pkg/dir"
 )
 
-func commandCreateTable(query string, commands []string) []string {
+func CommandCreateTable(query string, commands []string) []string {
 
 	msg := onValidateCreateTable(query)
 	if len(msg) > 0 {
@@ -16,26 +17,26 @@ func commandCreateTable(query string, commands []string) []string {
 	tableName := commands[2]
 
 	createDirTable(tableName)
-	fields := extractFieldsCreateTable(query)
+	fields := commands_func.ExtractFieldsCreateTable(query)
 
 	tableData := command.Table{
 		TableName: tableName,
 		Fields:    fields,
 	}
 
-	saveTableConfig(tableData)
+	commands_func.SaveTableConfig(tableData)
 
 	return []string{"Table '" + tableName + "' successfully created!"}
 }
 
 func createDirTable(tableName string) {
 
-	if !file.DirExists(global.GetPathTable(tableName)) {
-		file.CreateDir(global.GetPathTable(tableName))
+	if !dir.DirExists(global.GetPathTable(tableName)) {
+		dir.CreateDir(global.GetPathTable(tableName))
 	}
 
-	if !file.DirExists(global.GetPathTableData(tableName)) {
-		file.CreateDir(global.GetPathTableData(tableName))
+	if !dir.DirExists(global.GetPathTableData(tableName)) {
+		dir.CreateDir(global.GetPathTableData(tableName))
 	}
 }
 

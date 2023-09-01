@@ -3,6 +3,7 @@ package global
 import (
 	"fmt"
 	"go-zdb-api/internal/models/command"
+	"go-zdb-api/pkg/dir"
 	"go-zdb-api/pkg/file"
 )
 
@@ -10,25 +11,43 @@ var TablesInMemory []command.Table
 var UniquesInMemory []command.Unique
 
 var pathData string = "data/"
-var pathDatabase string = "teste_db"
+var pathDatabase string
 
 func LoadDatabaseInMemory() {
 	loadTablesInMemory()
 	loadUniquesInMemory()
+
+	fmt.Println("TablesInMemory: ", TablesInMemory)
+	fmt.Println("UniquesInMemory: ", UniquesInMemory)
 }
 
 func loadTablesInMemory() {
-	var table command.Table
-	file.LoadFileJSON(GetPathTableConfig("teste"), &table)
 
-	TablesInMemory = append(TablesInMemory, table)
+	tablesDir, _ := dir.ListDir(GetPathTables())
+	for _, tableDir := range tablesDir {
+
+		var table command.Table
+		file.LoadFileJSON(GetPathTableConfig(tableDir), &table)
+
+		TablesInMemory = append(TablesInMemory, table)
+	}
+
 }
 
 func loadUniquesInMemory() {
-	var unique command.Unique
-	file.LoadFileJSON(GetPathUniqueConfig("simple", "unique_simple_symbol"), &unique)
+	tablesDir, _ := dir.ListDir(GetPathTables())
+	for _, tableDir := range tablesDir {
 
-	UniquesInMemory = append(UniquesInMemory, unique)
+		uniquesDir, _ := dir.ListDir(GetPathUniques(tableDir))
+		for _, uniqueDir := range uniquesDir {
+			var unique command.Unique
+			file.LoadFileJSON(GetPathUniqueConfig(tableDir, uniqueDir), &unique)
+
+			UniquesInMemory = append(UniquesInMemory, unique)
+		}
+
+	}
+
 }
 
 func GetTableInMemory(tableName string) command.Table {

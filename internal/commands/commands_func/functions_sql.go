@@ -1,7 +1,6 @@
-package commands
+package commands_func
 
 import (
-	"fmt"
 	"go-zdb-api/internal/global"
 	"go-zdb-api/internal/models/command"
 	"go-zdb-api/pkg/file"
@@ -17,14 +16,12 @@ func getSequenceLastValue(sequenceName string) int {
 	}
 
 	sequenceJson.LasValue = sequenceJson.LasValue + sequenceJson.IncrementValue
-	saveSequenceConfig(sequenceJson)
+	SaveSequenceConfig(sequenceJson)
 
 	return sequenceJson.LasValue
 }
 
 func CountLines(filename string) int {
 	lines, _ := file.ReadLines(filename)
-	fmt.Println(filename)
-	fmt.Println(len(lines))
-	return len(lines)
+	return len(lines) - 1
 }
